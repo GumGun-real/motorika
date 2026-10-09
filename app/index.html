@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#10202b">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Моторика">
+<title>Моторика — Мой гараж</title>
+<style>
+:root{--bg:#e6ebee;--card:#fff;--ink:#10202b;--mute:#5f6f7a;--line:#d3dbe0;--acc:#f2b705;--chip:#eef2f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1920;--card:#15262f;--ink:#eaf0f3;--mute:#8da0ab;--line:#263944;--acc:#f5c518;--chip:#1e323d}}
+:root[data-theme="dark"]{--bg:#0d1920;--card:#15262f;--ink:#eaf0f3;--mute:#8da0ab;--line:#263944;--acc:#f5c518;--chip:#1e323d}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,.t{font-family:Bahnschrift,"DIN Alternate","Roboto Condensed","Arial Narrow",system-ui,sans-serif}
+.w{max-width:560px;margin:0 auto;padding:20px 16px 110px}
+h1{font-size:44px;line-height:1;margin:6px 0 4px;font-weight:700;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 20px}
+.car{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:14px;padding:14px;margin:0 0 12px}
+.top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.top b{font-size:22px;display:block}.top small{color:var(--mute);font-size:14px}
+.odo{display:flex;gap:3px;margin:12px 0 10px}
+.odo i{font:700 22px/1 ui-monospace,Menlo,Consolas,monospace;font-style:normal;background:var(--ink);color:var(--bg);width:25px;height:36px;display:grid;place-items:center;border-radius:4px}
+.odo span{align-self:end;margin-left:6px;color:var(--mute);font-size:14px}
+.meta{display:flex;flex-wrap:wrap;gap:6px}.meta span{background:var(--chip);border-radius:99px;padding:3px 10px;font-size:13px}
+.nick{margin:8px 0 0;font-weight:600}
+.empty{background:var(--card);border:2px dashed var(--line);border-radius:14px;padding:28px 18px;text-align:center;color:var(--mute)}
+button{font:inherit;color:inherit;cursor:pointer}
+.ghost{background:none;border:0;padding:6px 10px;font-size:18px;border-radius:8px}
+.ghost.warn{font-size:14px;background:var(--acc);color:#10202b;font-weight:700}
+.btn{width:100%;border:0;background:var(--acc);color:#10202b;font:700 18px Bahnschrift,"DIN Alternate","Arial Narrow",system-ui,sans-serif;padding:15px;border-radius:12px}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line)}
+.bar .btn{display:block;max-width:528px;margin:0 auto}
+.ov{position:fixed;inset:0;background:rgba(5,12,16,.6);display:none;align-items:flex-end;justify-content:center}.ov.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:560px;max-height:92%;overflow-y:auto;border-radius:20px 20px 0 0;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px))}
+.sh{display:flex;align-items:center;justify-content:space-between}.sh b{font-size:22px}
+.steps{display:flex;gap:4px;margin:8px 0 10px}.steps i{flex:1;height:4px;border-radius:2px;background:var(--line)}.steps i.on{background:var(--acc)}
+.crumbs{color:var(--mute);font-size:14px;margin:0 0 10px}
+.opt{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--chip);border:0;border-radius:10px;padding:14px;margin:0 0 8px}
+.opt[hidden]{display:none}.opt small{color:var(--mute)}
+.link{background:none;border:0;color:var(--ink);text-decoration:underline;padding:10px 0}
+label{display:block;margin:0 0 12px;font-size:14px;color:var(--mute)}
+input,select{display:block;width:100%;margin-top:4px;padding:12px;font:16px system-ui,sans-serif;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px}
+#q{margin:0 0 10px}
+#err{color:#c0392b;margin:0 0 10px;min-height:1em}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+details{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}summary{cursor:pointer;font-weight:600;padding:6px 0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;margin:0 0 6px;background:var(--chip);border-radius:10px;border-left:4px solid transparent}
+.row small{display:block;color:var(--mute);font-size:13px}.row.soon{border-left-color:var(--acc)}.row.bad{border-left-color:#c0392b}
+.row2{display:flex;gap:6px;margin:8px 0}.row2 input{margin:0;min-width:0}
+.sm{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 10px;font-size:14px;white-space:nowrap}
+.mut{color:var(--mute);font-size:13px}h3.t{font-size:16px;margin:12px 0 6px}
+textarea{display:block;width:100%;margin-top:4px;padding:10px;font:13px ui-monospace,Menlo,monospace;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;word-break:break-all}
+.qr{background:#fff;display:inline-block;padding:6px;border-radius:8px;margin:8px 0}.qr img{display:block;max-width:100%}
+.btn{margin-bottom:6px}
+</style></head><body>
+<div class="w">
+<div class="t" style="font-weight:700;font-size:18px">Моторика</div>
+<h1>Мой гараж</h1>
+<p class="sub">Данные хранятся только на этом устройстве.</p>
+<button class="link" onclick="xfer()">Перенести на другой телефон</button>
+<div id="g"></div>
+<p class="sub" style="font-size:13px;margin-top:20px">Каталог демонстрационный: перед запуском его нужно сверить с реальной базой.</p>
+</div>
+<div class="bar"><button class="btn" onclick="openSheet()">Добавить машину</button></div>
+<div class="ov" id="ov"><div class="sheet" id="sh"></div></div>
+<script src="qrcode.js"></script>
+<script>
+const e=(v,h,f,t)=>`${v} л${t?' ('+t+')':''}, ${h} л.с., ${f||'бензин'}`;
+const C={
+Lada:{Granta:[["I (2190)",2011,2018,[e(1.6,87,0,'8V'),e(1.6,98,0,'16V'),e(1.6,106,0,'16V')]],["FL (рестайлинг)",2018,0,[e(1.6,87,0,'8V'),e(1.6,98,0,'16V'),e(1.6,106,0,'16V')]]],
+Vesta:[["I (2180)",2015,0,[e(1.6,106,0,'16V'),e(1.8,122,0,'16V')]]],
+Priora:[["I (2170)",2007,2013,[e(1.6,81,0,'8V'),e(1.6,98,0,'16V')]],["Рестайлинг",2013,2018,[e(1.6,87,0,'8V'),e(1.6,98,0,'16V')]]],
+"Niva Legend":[["2121 / 21214",1977,0,[e(1.7,83)]]]},
+Toyota:{Camry:[["XV40",2006,2011,[e(2.4,167),e(3.5,277)]],["XV50",2011,2017,[e(2.0,150),e(2.5,181),e(3.5,249)]],["XV70",2017,2024,[e(2.0,150),e(2.5,181),e(3.5,249)]]],
+Corolla:[["E150",2006,2013,[e(1.4,97),e(1.6,124)]],["E180",2013,2019,[e(1.6,122),e(1.8,140)]]],
+RAV4:[["XA30",2005,2012,[e(2.0,152),e(2.4,170)]],["XA40",2012,2019,[e(2.0,146),e(2.5,180)]],["XA50",2018,0,[e(2.0,149),e(2.5,199)]]]},
+Volkswagen:{Golf:[["V",2003,2008,[e(1.4,80),e(1.6,102)]],["VI",2008,2012,[e(1.4,122,0,'TSI'),e(1.6,105)]],["VII",2012,2020,[e(1.4,122,0,'TSI'),e(1.4,140,0,'TSI'),e(1.6,110)]]],
+Passat:[["B6",2005,2010,[e(1.8,160,0,'TSI'),e(2.0,140,'дизель','TDI')]],["B7",2010,2015,[e(1.8,152,0,'TSI'),e(2.0,140,'дизель','TDI')]],["B8",2014,2023,[e(1.4,150,0,'TSI'),e(2.0,150,'дизель','TDI')]]],
+Polo:[["V (седан)",2010,2020,[e(1.6,85),e(1.6,105)]],["VI (лифтбэк)",2020,2022,[e(1.6,110)]]]},
+Skoda:{Octavia:[["A5",2004,2013,[e(1.6,102),e(1.8,160,0,'TSI')]],["A7",2012,2020,[e(1.4,140,0,'TSI'),e(1.6,110),e(1.8,180,0,'TSI')]]],
+Rapid:[["I",2012,2020,[e(1.6,105),e(1.4,125,0,'TSI')]]]},
+Hyundai:{Solaris:[["I",2010,2017,[e(1.4,107),e(1.6,123)]],["II",2017,2022,[e(1.4,100),e(1.6,123)]]],
+Creta:[["I",2016,2021,[e(1.6,121),e(2.0,149)]],["II",2021,0,[e(1.6,121),e(2.0,149)]]]},
+Kia:{Rio:[["III",2011,2017,[e(1.4,107),e(1.6,123)]],["IV",2017,2022,[e(1.4,100),e(1.6,123)]]],
+Ceed:[["I (ED)",2007,2012,[e(1.4,109),e(1.6,122)]],["II (JD)",2012,2018,[e(1.4,100),e(1.6,129)]]]},
+Renault:{Logan:[["I",2005,2015,[e(1.4,75),e(1.6,102,0,'16V')]],["II",2014,2022,[e(1.6,82,0,'8V'),e(1.6,102,0,'16V')]]],
+Duster:[["I",2010,2021,[e(1.6,102),e(2.0,135),e(1.5,109,'дизель','dCi')]],["II",2021,0,[e(1.6,114),e(1.3,150,0,'TCe')]]]},
+Daewoo:{Lanos:[["T100 / T150",1997,2017,[e(1.4,75),e(1.5,86),e(1.6,106,0,'16V')]]],
+Nexia:[["N100",1994,2008,[e(1.5,75,0,'8V'),e(1.5,80,0,'16V')]],["N150",2008,2016,[e(1.5,80,0,'8V'),e(1.5,100,0,'16V')]]]},
+Ford:{Focus:[["II",2004,2011,[e(1.6,100),e(1.8,125),e(2.0,145)]],["III",2010,2018,[e(1.6,105),e(1.6,125),e(2.0,150)]]]}
+};
+const GB=['Механика','Автомат','Вариатор','Робот'],DR=['Передний','Задний','Полный'],NOW=new Date().getFullYear(),KEY='motorika.garage';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let garage=[];try{garage=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(x){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(garage))}catch(x){}};
+let sel={},pend=-1;
+const odo=n=>String(Math.round(n)).padStart(6,'0').split('').map(d=>`<i>${d}</i>`).join('');
+const SV=[['Масло и масляный фильтр',10000],['Воздушный фильтр',15000],['Свечи зажигания',30000],['Тормозные колодки',40000],['Охлаждающая жидкость',60000],['ГРМ (ремень или цепь)',90000]];
+let op={};
+const est=c=>Math.round(c.km+c.mkm*(Date.now()-(c.at||Date.now()))/2630000000);
+const fm=n=>Math.abs(n).toLocaleString('ru');
+function home(){
+  $('#g').innerHTML=garage.length?garage.map((c,i)=>{
+    const k=est(c);
+    const to=SV.map((s,j)=>{const r=(c.svc&&c.svc[j]!=null?c.svc[j]:c.km)+s[1]-k,m=c.mkm?Math.round(r/c.mkm):0;
+      return `<div class="row ${r<=0?'bad':r<=1000?'soon':''}"><span>${s[0]}<small>${r<=0?'просрочено на '+fm(r)+' км':'через '+fm(r)+' км'+(c.mkm&&r>0?', примерно '+m+' мес.':'')}</small></span><button class="sm" onclick="done(${i},${j})">Сделано</button></div>`}).join('');
+    const dl=(c.dl||[]).map((d,j)=>{const n=Math.ceil((new Date(d.d)-Date.now())/864e5);return `<div class="row ${n<0?'bad':n<=7?'soon':''}"><span>${esc(d.t)}<small>${isNaN(n)?'дата не указана':n<0?'просрочено на '+(-n)+' дн.':'осталось '+n+' дн., до '+esc(d.d)}</small></span><button class="sm" onclick="rmDl(${i},${j})">Убрать</button></div>`}).join('');
+    return `<div class="car"><div class="top"><div><b class="t">${esc(c.brand)} ${esc(c.model)}</b><small>${esc(c.gen)}${c.gen&&c.eng?', ':''}${esc(c.eng)}</small></div>${pend===i?`<button class="ghost warn" onclick="del(${i})">Удалить?</button>`:`<button class="ghost" onclick="del(${i})" aria-label="Удалить машину">🗑</button>`}</div><div class="odo">${odo(k)}<span>км</span></div><div class="meta"><span>${c.year} г.</span><span>${c.mkm} км в месяц</span><span>${esc(c.gb)}</span><span>${esc(c.drv)} привод</span></div>${c.nick?`<p class="nick">${esc(c.nick)}</p>`:''}
+<details ${op[i]?'open':''} ontoggle="op[${i}]=this.open"><summary>ТО и сроки</summary>
+<div class="row2"><input id="km${i}" type="number" inputmode="numeric" min="0" placeholder="Пробег сейчас, км"><button class="sm" onclick="updKm(${i})">Обновить</button></div>
+<h3 class="t">ТО</h3>${to}<h3 class="t">Сроки</h3>${dl||'<p class="mut">Добавьте штраф со скидкой, ОСАГО или смену резины.</p>'}
+<div class="row2"><input id="dt${i}" maxlength="30" placeholder="Что, например ОСАГО"><input id="dd${i}" type="date"><button class="sm" onclick="addDl(${i})">Добавить</button></div>
+<p class="mut">Пробег считается по среднему в месяц, пока вы его не обновите. Интервалы ТО типовые, а не регламент производителя: сверяйте с сервисной книжкой.</p></details></div>`}).join(''):`<div class="empty"><b class="t" style="font-size:20px;color:var(--ink)">Гараж пуст</b><br>Добавьте первую машину по каталогу: марка, модель, поколение, двигатель.</div>`;
+}
+function done(i,j){const c=garage[i];c.svc=c.svc||{};c.svc[j]=est(c);save();home()}
+function updKm(i){const v=parseInt($('#km'+i).value,10);if(isNaN(v)||v<0)return;garage[i].km=v;garage[i].at=Date.now();save();home()}
+function addDl(i){const t=$('#dt'+i).value.trim(),d=$('#dd'+i).value;if(!t||!d)return;(garage[i].dl=garage[i].dl||[]).push({t,d});garage[i].dl.sort((a,b)=>a.d<b.d?-1:1);save();home()}
+function rmDl(i,j){garage[i].dl.splice(j,1);save();home()}
+function xfer(){
+  const code=btoa(unescape(encodeURIComponent(JSON.stringify(garage))));
+  let qr='<p class="mut">Гараж слишком большой для QR, используйте код.</p>';
+  try{const q=qrcode(0,'L');q.addData(code);q.make();qr=`<div class="qr">${q.createImgTag(4,8)}</div>`}catch(x){}
+  $('#sh').innerHTML=`<div class="sh"><b class="t">Перенос данных</b><button class="ghost" onclick="closeSheet()" aria-label="Закрыть">✕</button></div><p class="mut">Данные идут напрямую между телефонами, через сервер не проходят. На этом телефоне покажите QR или скопируйте код. На другом откройте приложение, вставьте код ниже и нажмите «Добавить» или «Заменить». QR можно считать камерой, а полученный текст вставить сюда.</p>${garage.length?qr+`<label>Код гаража<textarea id="xc" readonly rows="3">${code}</textarea></label><button class="btn" onclick="cp()">Скопировать код</button>`:'<p class="mut">Гараж пуст, переносить нечего.</p>'}<label style="margin-top:16px">Вставить код с другого телефона<textarea id="xi" rows="3"></textarea></label><p id="err" role="alert"></p><button class="btn" onclick="imp(1)">Добавить к гаражу</button><button class="link" onclick="imp(0)">Заменить гараж</button>`;
+  $('#ov').classList.add('on');
+}
+function cp(){const t=$('#xc');t.select();try{navigator.clipboard.writeText(t.value)}catch(x){try{document.execCommand('copy')}catch(y){}}$('#err').textContent='Код скопирован.'}
+function imp(a){
+  const err=t=>{$('#err').textContent=t};
+  try{
+    const r=JSON.parse(decodeURIComponent(escape(atob($('#xi').value.trim()))));
+    if(!Array.isArray(r))throw 0;
+    const S=(v,n)=>String(v||'').slice(0,n);
+    const ok=r.filter(c=>c&&typeof c.brand==='string'&&typeof c.model==='string').map(c=>({brand:S(c.brand,30),model:S(c.model,30),gen:S(c.gen,40),eng:S(c.eng,60),gb:S(c.gb,20),drv:S(c.drv,20),year:+c.year||0,km:Math.max(0,+c.km||0),mkm:Math.max(0,+c.mkm||0),nick:S(c.nick,30),at:+c.at||Date.now(),svc:Object.fromEntries(Object.entries(c.svc&&typeof c.svc==='object'?c.svc:{}).map(([k,v])=>[k,+v||0])),dl:(Array.isArray(c.dl)?c.dl:[]).slice(0,20).map(d=>({t:S(d&&d.t,30),d:S(d&&d.d,10)}))}));
+    if(!ok.length)throw 0;
+    garage=a?ok.concat(garage):ok;save();home();closeSheet();
+  }catch(x){err('Код не подошёл. Скопируйте его целиком с первого телефона.')}
+}
+function del(i){if(pend===i){garage.splice(i,1);save();pend=-1}else{pend=i;setTimeout(()=>{if(pend===i){pend=-1;home()}},3000)}home()}
+const step=()=>sel.manual?4:!sel.brand?0:!sel.model?1:!sel.gen?2:!sel.eng?3:4;
+const opt=(v,t,s)=>`<button class="opt" data-v="${esc(v)}" onclick="pick(this.dataset.v)"><span>${esc(t)}</span>${s?`<small>${esc(s)}</small>`:''}</button>`;
+function sheet(){
+  const s=step(),cr=[sel.brand,sel.model,sel.gen&&sel.gen[0],sel.eng].filter(Boolean);
+  let h=`<div class="sh"><button class="ghost" onclick="back()" aria-label="Назад">←</button><b class="t">${['Марка','Модель','Поколение','Двигатель','Детали'][s]}</b><button class="ghost" onclick="closeSheet()" aria-label="Закрыть">✕</button></div><div class="steps">${[0,1,2,3,4].map(i=>`<i class="${i<=s?'on':''}"></i>`).join('')}</div>`;
+  if(cr.length)h+=`<p class="crumbs">${cr.map(esc).join(' › ')}</p>`;
+  if(s<2)h+=`<input id="q" type="search" placeholder="Поиск" oninput="filt(this.value)">`;
+  if(s==0)h+=Object.keys(C).map(b=>opt(b,b)).join('')+`<button class="link" onclick="manual()">Нет в списке — ввести вручную</button>`;
+  if(s==1)h+=Object.keys(C[sel.brand]).map(m=>opt(m,m)).join('');
+  if(s==2)h+=C[sel.brand][sel.model].map((g,i)=>opt(i,g[0],g[1]+'–'+(g[2]||'н.в.'))).join('');
+  if(s==3)h+=sel.gen[3].map(x=>opt(x,x)).join('');
+  if(s==4)h+=form();
+  $('#sh').innerHTML=h;
+}
+function form(){
+  const m=sel.manual,y0=m?1980:sel.gen[1],y1=m?NOW:(sel.gen[2]||NOW);let yo='';
+  for(let y=y1;y>=y0;y--)yo+=`<option>${y}</option>`;
+  return (m?`<label>Марка<input id="f_b" maxlength="30"></label><label>Модель<input id="f_m" maxlength="30"></label><label>Двигатель<input id="f_e" maxlength="40" placeholder="1.6 л, 106 л.с., бензин"></label>`:'')+
+  `<label>Коробка<select id="f_gb">${GB.map(x=>`<option>${x}</option>`).join('')}</select></label><label>Привод<select id="f_dr">${DR.map(x=>`<option>${x}</option>`).join('')}</select></label><label>Год выпуска<select id="f_y">${yo}</select></label><label>Пробег, км<input id="f_km" type="number" inputmode="numeric" min="0" max="999999" placeholder="86400"></label><label>Пробег в месяц, км<input id="f_mk" type="number" inputmode="numeric" min="0" max="20000" value="1000"></label><label>Название или госномер (по желанию)<input id="f_n" maxlength="30"></label><p id="err" role="alert"></p><button class="btn" onclick="add()">Сохранить в гараж</button>`;
+}
+function pick(v){const s=step();if(s==0)sel.brand=v;else if(s==1)sel.model=v;else if(s==2)sel.gen=C[sel.brand][sel.model][+v];else sel.eng=v;sheet();$('#sh').scrollTop=0}
+function back(){if(sel.manual||!sel.brand){if(sel.manual){sel={};sheet()}else closeSheet();return}const k=['brand','model','gen','eng'];for(let i=3;i>=0;i--)if(sel[k[i]]){delete sel[k[i]];break}sheet()}
+function manual(){sel={manual:1};sheet()}
+function filt(v){v=v.toLowerCase();document.querySelectorAll('.opt').forEach(b=>b.hidden=!b.textContent.toLowerCase().includes(v))}
+function openSheet(){sel={};sheet();$('#ov').classList.add('on')}
+function closeSheet(){$('#ov').classList.remove('on')}
+$('#ov').addEventListener('click',ev=>{if(ev.target.id==='ov')closeSheet()});
+function add(){
+  const v=id=>($('#'+id)||{}).value||'',km=parseInt(v('f_km'),10),mk=parseInt(v('f_mk'),10),err=t=>{$('#err').textContent=t};
+  const b=sel.manual?v('f_b').trim():sel.brand,m=sel.manual?v('f_m').trim():sel.model;
+  if(!b||!m)return err('Укажите марку и модель.');
+  if(isNaN(km)||km<0)return err('Введите текущий пробег в километрах.');
+  if(isNaN(mk)||mk<0)return err('Введите пробег в месяц, например 1000.');
+  garage.unshift({brand:b,model:m,gen:sel.manual?'':sel.gen[0],eng:sel.manual?v('f_e').trim():sel.eng,gb:v('f_gb'),drv:v('f_dr'),year:+v('f_y'),km,mkm:mk,nick:v('f_n').trim(),at:Date.now(),svc:{},dl:[]});
+  save();home();closeSheet();
+}
+home();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
