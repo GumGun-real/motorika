@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101412">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Моторика">
+  <meta name="description" content="Твой цифровой помощник автомобилиста">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <title>Моторика — авто-помощник</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Моторика — главная" data-page="home">
+        <span class="brand-mark">↗</span><span>МОТОРИКА</span>
+      </a>
+      <button class="icon-btn" id="install-help" aria-label="Как установить">＋</button>
+    </header>
+
+    <main id="app">
+      <section class="page active" id="page-home">
+        <div class="eyebrow">ТВОЙ ЦИФРОВОЙ АВТОПОМОЩНИК</div>
+        <h1>Автомобиль<br><span>под контролем.</span></h1>
+        <div class="vehicle-card hero-card">
+          <div class="vehicle-photo" id="hero-photo" role="img" aria-label="Автомобиль"></div>
+          <div class="vehicle-info">
+            <span class="muted small">МОЙ АВТОМОБИЛЬ</span>
+            <h2 id="hero-name">Выбери свой автомобиль</h2>
+            <p class="muted" id="hero-meta">Марка · Модель · Год</p>
+            <button class="btn btn-outline" data-page="garage">Мой гараж <span>↗</span></button>
+          </div>
+        </div>
+        <div class="section-heading"><h2>Быстрый доступ</h2><span class="muted">МОТОРИКА</span></div>
+        <div class="quick-grid">
+          <button class="quick-card" data-page="garage"><span class="quick-icon">▣</span><b>Мой авто</b><small>Модель и данные</small></button>
+          <button class="quick-card" data-page="service"><span class="quick-icon">⌁</span><b>Обслуживание</b><small>ТО и история</small></button>
+          <button class="quick-card" data-page="expenses"><span class="quick-icon">₽</span><b>Расходы</b><small>Траты на авто</small></button>
+          <button class="quick-card" data-page="trip"><span class="quick-icon">➤</span><b>Калькулятор пути</b><small>Время и топливо</small></button>
+          <button class="quick-card" data-page="assistant"><span class="quick-icon">✳</span><b>AI-помощник</b><small>Задать вопрос</small></button>
+        </div>
+        <div class="section-heading"><h2>Напоминания</h2><button class="text-btn" data-page="service">Все →</button></div>
+        <div id="home-reminders" class="empty-state">Пока напоминаний нет. Добавь запись об обслуживании — и веди историю автомобиля в одном месте.</div>
+      </section>
+
+      <section class="page" id="page-garage">
+        <div class="eyebrow">ТВОЙ ГАРАЖ</div><h1>Выбери <span>автомобиль.</span></h1>
+        <p class="muted intro">Найди марку и модель, а затем укажи год и двигатель. Выбор сохраняется на этом устройстве.</p>
+        <label class="field-label" for="car-search">Поиск марки или модели</label>
+        <input id="car-search" class="field" placeholder="Например, BMW 3 Series" autocomplete="off">
+        <div id="brand-filters" class="chips"></div>
+        <div id="car-list" class="car-list"></div>
+        <div id="car-config" class="panel hidden">
+          <div class="section-heading"><h2 id="config-title">Настройка автомобиля</h2><button class="text-btn" id="close-config">Закрыть ×</button></div>
+          <label class="field-label" for="car-year">Год выпуска</label>
+          <select id="car-year" class="field"></select>
+          <label class="field-label" for="car-engine">Тип двигателя</label>
+          <select id="car-engine" class="field">
+            <option>Бензин</option><option>Дизель</option><option>Газ / бензин</option><option>Гибрид</option><option>Электро</option>
+          </select>
+          <label class="field-label" for="car-mileage">Пробег, км (необязательно)</label>
+          <input id="car-mileage" class="field" type="number" min="0" placeholder="Например, 47000">
+          <button id="save-car" class="btn btn-primary full">Сохранить автомобиль <span>→</span></button>
+        </div>
+      </section>
+
+      <section class="page" id="page-service">
+        <div class="eyebrow">ИСТОРИЯ АВТОМОБИЛЯ</div><h1>Сервис и <span>уход.</span></h1>
+        <p class="muted intro">Записывай обслуживание и отмечай важные работы, чтобы ничего не забыть.</p>
+        <div class="panel">
+          <h2>Добавить запись</h2>
+          <label class="field-label" for="service-type">Что делали?</label>
+          <select id="service-type" class="field"><option>Замена масла</option><option>Фильтры</option><option>Тормоза</option><option>Шины</option><option>Подвеска</option><option>Ремонт двигателя</option><option>Другое</option></select>
+          <div class="form-row">
+            <div><label class="field-label" for="service-date">Дата</label><input id="service-date" class="field" type="date"></div>
+            <div><label class="field-label" for="service-cost">Стоимость, ₽</label><input id="service-cost" class="field" type="number" min="0" placeholder="0"></div>
+          </div>
+          <label class="field-label" for="service-note">Комментарий</label><input id="service-note" class="field" placeholder="Пробег, детали, мастер…">
+          <button id="add-service" class="btn btn-primary full">Добавить запись <span>＋</span></button>
+        </div>
+        <div class="section-heading"><h2>История работ</h2><span id="service-count" class="muted">0 записей</span></div>
+        <div id="service-list" class="stack"></div>
+      </section>
+
+      <section class="page" id="page-expenses">
+        <div class="eyebrow">ФИНАНСЫ АВТОМОБИЛЯ</div><h1>Держи расходы <span>на виду.</span></h1>
+        <div class="stats-grid">
+          <div class="stat-card"><small>ВСЕГО ЗАПИСАНО</small><strong id="total-expenses">0 ₽</strong><span class="muted">по истории обслуживания</span></div>
+          <div class="stat-card"><small>ЗАПИСЕЙ</small><strong id="total-records">0</strong><span class="muted">в сервисной истории</span></div>
+        </div>
+        <div class="panel">
+          <h2>Калькулятор топлива</h2>
+          <p class="muted small">Прикинь стоимость поездки. Расчёт работает прямо на устройстве.</p>
+          <label class="field-label" for="fuel-distance">Расстояние, км</label><input id="fuel-distance" class="field" type="number" min="0" value="100">
+          <div class="form-row">
+            <div><label class="field-label" for="fuel-consumption">Расход, л/100 км</label><input id="fuel-consumption" class="field" type="number" min="0" step="0.1" value="8"></div>
+            <div><label class="field-label" for="fuel-price">Цена, ₽/л</label><input id="fuel-price" class="field" type="number" min="0" step="0.1" value="60"></div>
+          </div>
+          <div class="fuel-result"><small>ПРИМЕРНАЯ СТОИМОСТЬ ПОЕЗДКИ</small><strong id="fuel-result">480 ₽</strong></div>
+          <button id="calc-fuel" class="btn btn-outline full">Пересчитать ↻</button>
+        </div>
+      </section>
+
+      <section class="page" id="page-trip">
+        <div class="eyebrow">ПЛАНИРОВАНИЕ ПОЕЗДКИ</div><h1>Сколько <span>сожжём?</span></h1>
+        <p class="muted intro">Оценим время в пути, топливо и стоимость с учётом выбранного автомобиля, скорости и режима движения.</p>
+        <div class="panel">
+          <div class="section-heading" style="margin-top:0"><h2>Параметры поездки</h2><span class="muted">РАСЧЁТ</span></div>
+          <div class="vehicle-mini" id="trip-car-summary">Автомобиль не выбран — сначала выбери машину в гараже.</div>
+          <label class="field-label" for="trip-distance">Расстояние, км</label><input id="trip-distance" class="field" type="number" min="1" value="120">
+          <div class="form-row">
+            <div><label class="field-label" for="trip-speed">Средняя скорость, км/ч</label><input id="trip-speed" class="field" type="number" min="10" max="160" value="80"></div>
+            <div><label class="field-label" for="trip-fuel-price">Цена топлива, ₽/л</label><input id="trip-fuel-price" class="field" type="number" min="0" step="0.1" value="60"></div>
+          </div>
+          <label class="field-label" for="trip-style">Условия движения</label>
+          <select id="trip-style" class="field">
+            <option value="city">Город, пробки и разгоны</option>
+            <option value="mixed" selected>Смешанный режим</option>
+            <option value="highway">Трасса, ровное движение</option>
+          </select>
+          <label class="field-label" for="trip-load">Нагрузка</label>
+          <select id="trip-load" class="field"><option value="light">Водитель, небольшой багаж</option><option value="normal" selected>2–3 человека / обычный багаж</option><option value="heavy">Полная загрузка / кондиционер</option></select>
+          <div class="divider-line"></div>
+          <label class="field-label" for="trip-consumption">Базовый расход выбранной машины, л/100 км</label>
+          <input id="trip-consumption" class="field" type="number" min="1" max="40" step="0.1" value="8.0">
+          <p class="hint">Базовое значение можно поправить. Позже подключим справочные данные производителя по конкретному двигателю и коробке передач.</p>
+          <button id="calculate-trip" class="btn btn-primary full">Рассчитать поездку <span>→</span></button>
+        </div>
+        <div id="trip-results" class="trip-results hidden">
+          <div class="trip-main">
+            <small>ПРИМЕРНОЕ ВРЕМЯ В ПУТИ</small><strong id="trip-time">1 ч 30 мин</strong><span id="trip-speed-label">Средняя скорость: 80 км/ч</span>
+          </div>
+          <div class="trip-result-grid">
+            <div class="trip-stat"><small>ТОПЛИВО</small><strong id="trip-litres">9,6 л</strong><span>примерно сгорит</span></div>
+            <div class="trip-stat"><small>СТОИМОСТЬ</small><strong id="trip-cost">576 ₽</strong><span>по заданной цене</span></div>
+            <div class="trip-stat"><small>РАСХОД</small><strong id="trip-final-consumption">8,0 л</strong><span>на 100 км</span></div>
+            <div class="trip-stat"><small>ДИСТАНЦИЯ</small><strong id="trip-distance-result">120 км</strong><span>в одну сторону</span></div>
+          </div>
+          <div class="panel estimate-note"><b>Как читать результат</b><p id="trip-explanation">Это ориентировочная оценка, не точное измерение ЭБУ.</p></div>
+        </div>
+      </section>
+
+      <section class="page" id="page-assistant">
+        <div class="eyebrow">МОТОРИКА AI</div><h1>Спроси <span>у помощника.</span></h1>
+        <p class="muted intro">Пока это демонстрационный интерфейс: он помогает оформить вопрос, но не подключён к настоящей AI-модели.</p>
+        <div class="chat-window" id="chat-window">
+          <div class="chat-bubble bot"><span class="bot-mark">✳</span><div><b>Моторика</b><p>Привет! Могу помочь сформулировать вопрос об обслуживании, расходе топлива или выборе запчастей. Что разберём?</p></div></div>
+        </div>
+        <div class="suggestions"><button class="chip" data-question="Как подготовить автомобиль к зиме?">Подготовка к зиме</button><button class="chip" data-question="Как рассчитать расход топлива?">Расход топлива</button><button class="chip" data-question="Что проверить перед дальней поездкой?">Перед поездкой</button></div>
+        <form id="chat-form" class="chat-form"><input id="chat-input" class="field" placeholder="Напиши свой вопрос…" autocomplete="off"><button class="send-btn" aria-label="Отправить">↑</button></form>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Основная навигация">
+      <button class="nav-item selected" data-page="home"><span>⌂</span><small>Главная</small></button>
+      <button class="nav-item" data-page="garage"><span>▣</span><small>Гараж</small></button>
+      <button class="nav-item" data-page="service"><span>⌁</span><small>Сервис</small></button>
+      <button class="nav-item" data-page="expenses"><span>₽</span><small>Расходы</small></button>
+      <button class="nav-item" data-page="trip"><span>➤</span><small>Поездка</small></button>
+      <button class="nav-item" data-page="assistant"><span>✳</span><small>Помощник</small></button>
+    </nav>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
